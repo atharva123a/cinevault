@@ -25,7 +25,8 @@
     "http-status-codes": "^2.2.0",
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
-    "ts-node-dev": "^2.0.0"
+    "ts-node-dev": "^2.0.0",
+    "zod": "^3.22.2"
   },
   "devDependencies": {
     "prisma": "^5.2.0",

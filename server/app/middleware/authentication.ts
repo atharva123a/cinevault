@@ -1,7 +1,8 @@
 import { isTokenValid } from '../utils/jwt';
-import { Request, Response, NextFunction } from 'express';
+import { Response, NextFunction } from 'express';
 import createAPIError from '../utils/error';
 import User from '../user/userSchema';
+import { StatusCodes } from 'http-status-codes';
 
 const authenticateUser = async (
   req: any,
@@ -19,7 +20,7 @@ const authenticateUser = async (
 
     if (!payload) {
       return createAPIError(
-        401,
+        StatusCodes.UNAUTHORIZED,
         'The token has expired! Please login again!',
         res
       );

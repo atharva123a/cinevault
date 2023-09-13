@@ -5,8 +5,10 @@ import compression from 'compression';
 import { PORT } from './config';
 
 import { router as userRouter } from './user/userRoutes';
+import { router as movieRouter } from './movie/movieRoutes';
 import { errorHandlerMiddleware } from './middleware/error-handler';
 import { notFoundMiddleware } from './middleware/not-found';
+import { authenticateUser } from './middleware/authentication';
 
 const app = express();
 
@@ -27,7 +29,7 @@ async function initRouter() {
   });
 
   app.use('/user', userRouter);
-
+  app.use('/movie', authenticateUser, movieRouter);
   app.use(errorHandlerMiddleware);
   app.use(notFoundMiddleware);
 }
