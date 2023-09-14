@@ -4,7 +4,7 @@ import { StatusCodes } from 'http-status-codes';
 
 import User from './userSchema';
 import { createTokenUser } from '../utils/createTokenUser';
-import { getTokens } from '../utils/jwt';
+import { createJWT, getTokens, isTokenValid } from '../utils/jwt';
 
 const getUser = async (req: any, res: Response) => {
   try {
@@ -109,4 +109,36 @@ const login = async (req: Request, res: Response) => {
   }
 };
 
-export = { getUser, login, register };
+const getAccessToken = async (req: Request, res: Response) => {
+  try {
+    const { refreshToken } = req.body;
+    const payload = isTokenValid(refreshToken, res);
+
+    if (!payload) {
+      return createAPIError(
+        StatusCodes.UNAUTHORIZED,
+        'The token has expired! Please login again!',
+        res
+      );
+    }
+    
+    let user = payload['user'];
+
+    const accessTokenJWT = createJWT(
+      { payload: { user, type: 'accessToken' } },
+      '1d'
+    );
+    const accessToken = {
+      accessTokenJWT,
+      expiresIn: 1000 * 60 * 60 * 24 // 24 hrs!
+    };
+
+    res.status(200).json({ accessToken, success: true });
+  } catch (error) {
+    console.log(error, 'error');
+    let message = error.msg || 'Something went wrong!';
+    createAPIError(StatusCodes.INTERNAL_SERVER_ERROR, message, res);
+  }
+};
+
+export = { getUser, login, register, getAccessToken };

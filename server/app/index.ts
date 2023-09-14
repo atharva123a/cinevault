@@ -9,14 +9,14 @@ import { router as movieRouter } from './movie/movieRoutes';
 import { errorHandlerMiddleware } from './middleware/error-handler';
 import { notFoundMiddleware } from './middleware/not-found';
 import { authenticateUser } from './middleware/authentication';
+import cors from 'cors';
 
 const app = express();
-
 app.use(compression());
 app.use(morgan('tiny'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-
+app.use(cors({ origin: 'http://localhost:3000' }));
 async function initServer() {
   app.listen(PORT, () => {
     console.log(`Server is running on port : ${PORT}`);

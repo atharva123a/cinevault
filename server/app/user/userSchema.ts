@@ -79,7 +79,7 @@ const loginUser = async ({ email, password }) => {
       };
     }
 
-    const isMatch = bcrypt.compare(password, user.password);
+    const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
       return {

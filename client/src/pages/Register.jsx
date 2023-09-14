@@ -7,17 +7,56 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Form from '../components/Form';
+import { userService } from '../api';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router-dom';
 
 const defaultTheme = createTheme();
 
 export default function Register() {
-  const handleSignUp = ({ email, password }) => {
-    console.log('hitting the register api!!');
-    console.log(`Email from child: ${email}`);
-    console.log(`password from child: ${password}`);
+  const navigate = useNavigate();
+
+  const handleSignUp = async ({ email, password }) => {
+    const { success, message, data } = await userService.default.registerUser({
+      email,
+      password
+    });
+
+    if (success == false) {
+      toast.error(`${message}`, {
+        position: 'top-center',
+        autoClose: 3000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light'
+      });
+      return;
+    }
+
+    toast.success(`${message}`, {
+      position: 'top-center',
+      autoClose: 3000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: 'colored'
+    });
+
+    setTimeout(() => {
+      // 👇 Redirects to about page, note the `replace: true`
+      navigate('/login', { replace: true });
+    }, 3000);
   };
+
   return (
     <ThemeProvider theme={defaultTheme}>
+      <ToastContainer />
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
