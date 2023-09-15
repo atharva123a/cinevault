@@ -41,7 +41,7 @@ const Example = () => {
     if (!resp.success) {
       toast.error(`Failed to get movies! Please reload!`, {
         position: 'top-center',
-        autoClose: 3000,
+        autoClose: 2000,
         hideProgressBar: true,
         closeOnClick: true,
         pauseOnHover: true,
@@ -83,7 +83,7 @@ const Example = () => {
 
       toast.success(`Data updated successfully!`, {
         position: 'top-center',
-        autoClose: 3000,
+        autoClose: 2000,
         hideProgressBar: true,
         closeOnClick: true,
         pauseOnHover: true,
@@ -102,8 +102,35 @@ const Example = () => {
   };
 
   const handleDeleteRow = useCallback(
-    (row) => {
+    async (row) => {
       //send api delete request here, then refetch or update local table data for re-render
+      const resp = await movieService.deleteMovie(row.original.id);
+
+      if (resp.success == false) {
+        toast.error(`${resp.message}`, {
+          position: 'top-center',
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'light'
+        });
+        return;
+      }
+
+      toast.success(`Movie deleted successfully!`, {
+        position: 'top-center',
+        autoClose: 2000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'colored'
+      });
+
       tableData.splice(row.index, 1);
       setTableData([...tableData]);
     },

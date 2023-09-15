@@ -65,4 +65,32 @@ const updateMovies = async (data) => {
   }
 };
 
-export default { getCreatedMovies, updateMovies };
+const deleteMovie = async (id) => {
+  try {
+    const accessToken = localStorage.getItem('accessToken');
+
+    let config = {
+      method: 'delete',
+      maxBodyLength: Infinity,
+      url: `${BASE_URL}/${id}`,
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json'
+      }
+    };
+
+    const response = await axios.request(config);
+
+    // Check if the request was successful
+    if (response.data.success == true) {
+      return {
+        success: true,
+        message: 'Deleted movie successfully!'
+      };
+    }
+  } catch (error) {
+    return { success: false, message: error.response.data.message };
+  }
+};
+
+export default { getCreatedMovies, updateMovies, deleteMovie };
