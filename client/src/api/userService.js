@@ -2,7 +2,6 @@ import axios from 'axios';
 
 const BASE_URL = 'http://localhost:8080/user'; // Replace with your API URL
 
-// Function to send a POST request for user registration
 const registerUser = async ({ email, password }) => {
   try {
     const response = await axios.post(`${BASE_URL}/register`, {

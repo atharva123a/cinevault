@@ -71,9 +71,7 @@ const Login = () => {
     navigate('/', { redirect: true });
     setTokens(data);
 
-    setTimeout(() => {
-      navigate('/', { replace: true });
-    }, 2000);
+    navigate('/', { replace: true });
   };
 
   return (

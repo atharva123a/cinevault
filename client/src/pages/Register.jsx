@@ -54,10 +54,8 @@ export default function Register() {
       theme: 'colored'
     });
 
-    setTimeout(() => {
-      // 👇 Redirects to about page, note the `replace: true`
-      navigate('/login', { replace: true });
-    }, 3000);
+    // 👇 Redirects to about page, note the `replace: true`
+    navigate('/login', { replace: true });
   };
 
   return (
