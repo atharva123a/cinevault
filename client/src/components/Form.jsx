@@ -4,6 +4,7 @@ import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
+import { toast } from 'react-toastify';
 
 const Form = (props) => {
   const [message, setMessage] = useState();
@@ -39,7 +40,7 @@ const Form = (props) => {
   }, []);
 
   return (
-    <Box component="form" onSubmit={handleInput} noValidate sx={{ mt: 1 }}>
+    <Box component="form" onSubmit={handleInput} sx={{ mt: 1 }}>
       <TextField
         margin="normal"
         required

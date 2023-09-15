@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { React, useEffect } from 'react';
 import Avatar from '@mui/material/Avatar';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
@@ -15,13 +15,28 @@ import { redirect, useNavigate } from 'react-router-dom';
 const defaultTheme = createTheme();
 
 const Login = () => {
-  const navigate = useNavigate();
-
-  React.useEffect(() => {
-    if (localStorage.getItem('accessToken')) {
+  useEffect(() => {
+    if (localStorage.getItem('accessToken') != null) {
       navigate('/', { replace: true });
     }
   }, []);
+
+  const navigate = useNavigate();
+
+  const setTokens = (data) => {
+    let accessToken = {
+      token: data.accessToken.accessTokenJWT,
+      expiresIn: data.accessToken.expiresIn + new Date().getTime()
+    };
+    let refreshToken = {
+      token: data.refreshToken.refreshTokenJWT,
+      expiresIn: data.refreshToken.expiresIn + new Date().getTime()
+    };
+    localStorage.setItem('accessToken', accessToken.token);
+    localStorage.setItem('refreshToken', refreshToken.token);
+    localStorage.setItem('accessExpiry', accessToken.expiresIn);
+    localStorage.setItem('refreshExpiry', refreshToken.expiresIn);
+  };
 
   const handleSignIn = async ({ email, password }) => {
     const { success, message, data } = await userService.default.loginUser({
@@ -53,24 +68,12 @@ const Login = () => {
       progress: undefined,
       theme: 'colored'
     });
-
-    let accessToken = {
-      token: data.accessToken.accessTokenJWT,
-      expiresIn: data.accessToken.expiresIn + new Date().getTime()
-    };
-    let refreshToken = {
-      token: data.refreshToken.refreshTokenJWT,
-      expiresIn: data.refreshToken.expiresIn + new Date().getTime()
-    };
-    localStorage.setItem('accessToken', accessToken.token);
-    localStorage.setItem('refreshToken', refreshToken.token);
-    localStorage.setItem('accessExpiry', accessToken.expiresIn);
-    localStorage.setItem('refreshExpiry', refreshToken.expiresIn);
+    navigate('/', { redirect: true });
+    setTokens(data);
 
     setTimeout(() => {
-      // 👇 Redirects to about page, note the `replace: true`
       navigate('/', { replace: true });
-    }, 3000);
+    }, 2000);
   };
 
   return (
