@@ -75,12 +75,7 @@ const isTokenValid = (token, res: Response) => {
     const payload = jwt.verify(token, JWT_SECRET);
     return payload;
   } catch (err) {
-    const error = err.message || err;
-    return createAPIError(
-      401,
-      'The token has expired! Please login again!',
-      res
-    );
+    return null;
   }
 };
 
