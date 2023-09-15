@@ -17,6 +17,12 @@ const defaultTheme = createTheme();
 export default function Register() {
   const navigate = useNavigate();
 
+  React.useEffect(() => {
+    if (localStorage.getItem('accessToken') != null) {
+      navigate('/', { replace: true });
+    }
+  }, []);
+
   const handleSignUp = async ({ email, password }) => {
     const { success, message, data } = await userService.default.registerUser({
       email,
@@ -37,10 +43,10 @@ export default function Register() {
       return;
     }
 
-    toast.success(`${message}`, {
+    toast.success(`${message} Redirecting to login page!`, {
       position: 'top-center',
-      autoClose: 3000,
-      hideProgressBar: true,
+      autoClose: 2000,
+      hideProgressBar: false,
       closeOnClick: true,
       pauseOnHover: true,
       draggable: true,
