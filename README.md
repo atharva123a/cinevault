@@ -78,6 +78,6 @@ npm start
 
 4. The client will run on port 3000 by default
 
-# [Loom Link](https://www.loom.com/looms/videos)
-
+# [Loom (Part 1)](https://www.loom.com/share/cb2fc2b0e63d46fcad6ccd81edce9d62)
+# [Loom (Part 2)](https://www.loom.com/share/888d5723852d475196dbcbdca1728bf0)
 
