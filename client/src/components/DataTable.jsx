@@ -19,6 +19,7 @@ import Loader from './Loader';
 import AddIcon from '@mui/icons-material/Add';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import AddMovieModal from './AddMovieModal';
 
 const Example = () => {
   const [createModalOpen, setCreateModalOpen] = useState(false);
@@ -31,9 +32,39 @@ const Example = () => {
     setLoading(false);
   }, []);
 
-  const handleCreateNewRow = (values) => {
-    tableData.push(values);
+  const handleCreateNewRow = async (values) => {
+    let refinedValues = values;
+    refinedValues.cast = values.cast.split(',');
+    refinedValues.releaseDate = values.releaseDate.$d;
+    refinedValues.rating = parseInt(values.rating);
+
+    const resp = await movieService.createMovie(refinedValues);
+    if (resp.success == false) {
+      toast.error(`Failed to create movie! Please try again!`, {
+        position: 'top-center',
+        autoClose: 2000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light'
+      });
+      return;
+    }
+    tableData.push(resp.data);
     setTableData([...tableData]);
+
+    toast.success(`Row inserted successfully!`, {
+      position: 'top-center',
+      autoClose: 2000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: 'colored'
+    });
   };
 
   const getData = async () => {
@@ -302,12 +333,18 @@ const Example = () => {
           </Button>
         )}
       />
-      <CreateNewAccountModal
+      {createModalOpen && (
+        <AddMovieModal
+          onClose={() => setCreateModalOpen(false)}
+          onSave={handleCreateNewRow}
+        />
+      )}
+      {/* <CreateNewAccountModal
         columns={columns}
         open={createModalOpen}
         onClose={() => setCreateModalOpen(false)}
         onSubmit={handleCreateNewRow}
-      />
+      /> */}
     </>
   );
 };

@@ -2,7 +2,6 @@ require('dotenv');
 import express, { Request, Response } from 'express';
 import morgan from 'morgan';
 import compression from 'compression';
-import { PORT } from './config';
 
 import { router as userRouter } from './user/userRoutes';
 import { router as movieRouter } from './movie/movieRoutes';
@@ -10,6 +9,8 @@ import { errorHandlerMiddleware } from './middleware/error-handler';
 import { notFoundMiddleware } from './middleware/not-found';
 import { authenticateUser } from './middleware/authentication';
 import cors from 'cors';
+
+const PORT = 8080;
 
 const app = express();
 app.use(compression());

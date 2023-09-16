@@ -32,13 +32,13 @@ const updateMovies = async (data) => {
   try {
     const accessToken = localStorage.getItem('accessToken');
 
-    let postData = JSON.stringify({
+    let postData = {
       name: data.name,
       rating: parseInt(data.rating),
       cast: data.cast.split(','),
       genre: data.genre,
       releaseDate: data.releaseDate
-    });
+    };
 
     let config = {
       method: 'patch',
@@ -93,4 +93,42 @@ const deleteMovie = async (id) => {
   }
 };
 
-export default { getCreatedMovies, updateMovies, deleteMovie };
+const createMovie = async (data) => {
+  try {
+    const accessToken = localStorage.getItem('accessToken');
+
+    let postData = {
+      name: data.name,
+      rating: data.rating,
+      cast: data.cast,
+      genre: data.genre,
+      releaseDate: data.releaseDate
+    };
+
+    let config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: `${BASE_URL}`,
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json'
+      },
+      data: postData
+    };
+
+    const response = await axios.request(config);
+
+    // Check if the request was successful
+    if (response.data.success == true) {
+      return {
+        success: true,
+        message: 'Created movie successfully!',
+        data: response.data.data
+      };
+    }
+  } catch (error) {
+    console.log(error, 'error');
+    return { success: false, message: error.response.data.message };
+  }
+};
+export default { getCreatedMovies, updateMovies, deleteMovie, createMovie };
