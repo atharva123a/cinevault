@@ -52,10 +52,15 @@ const Example = () => {
       });
       return;
     }
+
+    let today = new Date(resp.data.releaseDate);
+    resp.data.cast = resp.data.cast.join(', ');
+    resp.data.releaseDate = today.toLocaleDateString('en-US');
+
     tableData.push(resp.data);
     setTableData([...tableData]);
 
-    toast.success(`Row inserted successfully!`, {
+    toast.success(`Movie added successfully!`, {
       position: 'top-center',
       autoClose: 2000,
       hideProgressBar: true,
@@ -171,13 +176,6 @@ const Example = () => {
   function isNum(v) {
     return /\d/.test(v);
   }
-  function isValidDate(date) {
-    return (
-      date &&
-      Object.prototype.toString.call(date) === '[object Date]' &&
-      !isNaN(date)
-    );
-  }
 
   const getCommonEditTextFieldProps = useCallback(
     (cell) => {
@@ -211,11 +209,52 @@ const Example = () => {
               });
             }
           }
+          if (cell.column.id == 'name') {
+            if (event.target.value.trim().length <= 0) {
+              setValidationErrors({
+                ...validationErrors,
+                [cell.id]: `Name is required!`
+              });
+            } else {
+              delete validationErrors[cell.id];
+              setValidationErrors({
+                ...validationErrors
+              });
+            }
+          }
+
+          if (cell.column.id == 'genre') {
+            if (event.target.value.trim().length <= 0) {
+              setValidationErrors({
+                ...validationErrors,
+                [cell.id]: `Genre is required!`
+              });
+            } else {
+              delete validationErrors[cell.id];
+              setValidationErrors({
+                ...validationErrors
+              });
+            }
+          }
+
+          if (cell.column.id == 'cast') {
+            if (event.target.value.trim().length <= 0) {
+              setValidationErrors({
+                ...validationErrors,
+                [cell.id]: `Cast is required!`
+              });
+            } else {
+              delete validationErrors[cell.id];
+              setValidationErrors({
+                ...validationErrors
+              });
+            }
+          }
+
           if (cell.column.id == 'releaseDate') {
             let date = event.target.value;
             let x = new Date(date).getTime();
             if (isNaN(x)) {
-              console.log(x);
               setValidationErrors({
                 ...validationErrors,
                 [cell.id]: `Release Date should be a valid date!`
